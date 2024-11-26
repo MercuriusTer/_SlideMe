@@ -81,15 +81,8 @@ function OfferChoice({ selectedOffer, setSelectedOffer }) {
                 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 }).addTo(newMap);
 
-                const customIcon = L.icon({
-                    iconUrl: '/marker-icon.png', // Adjust path if needed
-                    shadowUrl: '/marker-shadow.png',
-                    iconSize: [25, 41], // Default size for marker
-                    iconAnchor: [12, 41], // Anchor point for the marker
-                });
-
-                // Add marker with the custom icon
-                L.marker([location.lat, location.lng], { icon: customIcon }).addTo(newMap);
+                // Add marker at the location
+                L.marker([location.lat, location.lng]).addTo(newMap);
 
                 // Add a circle with a 200m radius around the marker (scanning area)
                 L.circle([location.lat, location.lng], {
