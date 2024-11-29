@@ -100,6 +100,30 @@ function RequestOrder({ selectPosition1, selectPosition2 }) {
     // Check if the button should be disabled
     const isButtonDisabled = !newOfferDetails.carType || !newOfferDetails.callType;
 
+    const [images, setImages] = useState([]);
+
+    // Handle image upload
+    const handleImageUpload = (event, index = null) => {
+        const file = event.target.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setImages((prevImages) => {
+                if (index !== null) {
+                    const updatedImages = [...prevImages];
+                    updatedImages[index] = imageUrl;
+                    return updatedImages;
+                } else {
+                    return [...prevImages, imageUrl];
+                }
+            });
+        }
+    };
+
+    // Handle image delete
+    const handleImageDelete = (index) => {
+        setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    };
+
     return (
         <div className="request-order-container">
             <div className="content-scrolling" style={{ padding: "15px" }}>
@@ -214,6 +238,37 @@ function RequestOrder({ selectPosition1, selectPosition2 }) {
                         </div>
                     </Modal.Body>
                 </Modal>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+                    <div className="pic-container">
+                        <label htmlFor="" className="pic-title">ภาพถ่ายรถยนต์</label>
+                        <div className="pic-con-container">
+                            {images.map((image, index) => (
+                                <div key={index} className="image-preview" onClick={() => handleImageDelete(index)}>
+                                    <img src={image} alt={`Uploaded ${index + 1}`} className="preview-img" />
+                                    <div className="delete-overlay">
+                                        <span className="bi bi-trash-fill trash-icon"></span>
+                                    </div>
+                                </div>
+                            ))}
+                            {images.length < 5 && (
+                                <div className="image-upload">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageUpload(e)}
+                                        style={{ display: "none" }}
+                                        id={`upload-button-new`}
+                                    />
+                                    <label htmlFor="upload-button-new" className="add-picture">
+                                        เพิ่มภาพถ่าย <span className="bi bi-camera-fill"></span>
+                                    </label>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
                 <div className="req-input-container">
                     <input
